@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "brightscript",
+      "request": "launch",
+      "name": "BrightScript Debug: Launch",
+      "host": "192.168.1.145",
+      "password": "${env:ROKU_PASSWORD}",
+      "rootDir": "${workspaceFolder}"
+    }
+  ]
+}

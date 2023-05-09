@@ -50,6 +50,13 @@ Run it with one of the sample files:
 
     python3 scripts/statements2pdf.py testdata/statements/current.prn
 
+### [Digital Signage Channel for Roku](roku/)
+
+This is a sideloaded Roku channel that displays notices and events on the TV
+in the hallway outside of our office.
+
+![](docs/images/roku.png)
+
 ## License
 
 This software is the work of a government agency in the United States. To the
