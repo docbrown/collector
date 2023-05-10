@@ -1,0 +1,9 @@
+#define IDC_EXIT    1001
+#define IDC_LOG     1002
+#define IDI_APPICON 1003
+
+#ifdef RC_INVOKED
+
+IDI_APPICON ICON "app.ico"
+
+#endif

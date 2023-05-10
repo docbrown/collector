@@ -70,6 +70,15 @@ and SLP-2RLH thermal address labels.
 
 ![](docs/images/labelprinter.png)
 
+### [Barcode Scanner](barcodescanner/)
+
+This is a C++/Win32 application that exposes any barcode scanner supporting the
+WinRT `BarcodeScanner` API to multiple applications. By default, scanned
+barcodes are injected as keyboard events to the active window. Applications
+can also opt-in to receive `WM_COPYDATA` messages with the barcode type and the
+raw barcode contents. This greatly simplifies the implementation of scanner
+clients, especially in cases where one can't easily use the WinRT APIs, such as in a Java/Swing application.
+
 ## License
 
 This software is the work of a government agency in the United States. To the
