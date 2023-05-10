@@ -57,6 +57,19 @@ in the hallway outside of our office.
 
 ![](docs/images/roku.png)
 
+### [Address Label Printer](labelprinter/)
+
+This is a C#/WinForms application for printing address labels. It supports
+address validation via the USPS WebTools API. It can also read addresses from
+our tax collection system. The version of Qt used by the system does not
+support the Windows UI Automation API, so we use the WinRT OCR API to extract
+an address from a screenshot of the active window.
+
+This program is designed specifically for the Seiko Smart Label Printer 620
+and SLP-2RLH thermal address labels.
+
+![](docs/images/labelprinter.png)
+
 ## License
 
 This software is the work of a government agency in the United States. To the

@@ -1,0 +1,5 @@
+﻿GetClientRect
+PrintWindow
+EnumThreadWindows
+SendMessage
+WM_GETTEXT
