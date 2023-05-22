@@ -34,6 +34,7 @@ partial class LabelForm
             this.label3 = new System.Windows.Forms.Label();
             this.LabelTabControl = new System.Windows.Forms.TabControl();
             this.DomesticTabPage = new System.Windows.Forms.TabPage();
+            this.ConvertToInternationalButton = new System.Windows.Forms.Button();
             this.ValidateDomesticButton = new System.Windows.Forms.Button();
             this.DomesticZipTextBox = new System.Windows.Forms.TextBox();
             this.DomesticStateTextBox = new System.Windows.Forms.TextBox();
@@ -69,7 +70,6 @@ partial class LabelForm
             this.ShowDataMatrixMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.ExitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ConvertToInternationalButton = new System.Windows.Forms.Button();
             this.LabelTabControl.SuspendLayout();
             this.DomesticTabPage.SuspendLayout();
             this.InternationalTabPage.SuspendLayout();
@@ -136,6 +136,16 @@ partial class LabelForm
             this.DomesticTabPage.TabIndex = 0;
             this.DomesticTabPage.Text = "Domestic";
             this.DomesticTabPage.UseVisualStyleBackColor = true;
+            // 
+            // ConvertToInternationalButton
+            // 
+            this.ConvertToInternationalButton.Location = new System.Drawing.Point(6, 122);
+            this.ConvertToInternationalButton.Name = "ConvertToInternationalButton";
+            this.ConvertToInternationalButton.Size = new System.Drawing.Size(115, 28);
+            this.ConvertToInternationalButton.TabIndex = 10;
+            this.ConvertToInternationalButton.Text = "To International >";
+            this.ConvertToInternationalButton.UseVisualStyleBackColor = true;
+            this.ConvertToInternationalButton.Click += new System.EventHandler(this.ConvertToInternationalButton_Click);
             // 
             // ValidateDomesticButton
             // 
@@ -398,10 +408,10 @@ partial class LabelForm
             // 
             // CopyFromUsiMenuItem
             // 
-            this.CopyFromUsiMenuItem.Enabled = false;
             this.CopyFromUsiMenuItem.Name = "CopyFromUsiMenuItem";
             this.CopyFromUsiMenuItem.Size = new System.Drawing.Size(251, 22);
             this.CopyFromUsiMenuItem.Text = "Copy from USI";
+            this.CopyFromUsiMenuItem.Click += new System.EventHandler(this.CopyFromUsiMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
@@ -458,16 +468,6 @@ partial class LabelForm
             this.ExitMenuItem.Name = "ExitMenuItem";
             this.ExitMenuItem.Size = new System.Drawing.Size(251, 22);
             this.ExitMenuItem.Text = "Exit";
-            // 
-            // ConvertToInternationalButton
-            // 
-            this.ConvertToInternationalButton.Location = new System.Drawing.Point(6, 122);
-            this.ConvertToInternationalButton.Name = "ConvertToInternationalButton";
-            this.ConvertToInternationalButton.Size = new System.Drawing.Size(115, 28);
-            this.ConvertToInternationalButton.TabIndex = 10;
-            this.ConvertToInternationalButton.Text = "To International >";
-            this.ConvertToInternationalButton.UseVisualStyleBackColor = true;
-            this.ConvertToInternationalButton.Click += new System.EventHandler(this.ConvertToInternationalButton_Click);
             // 
             // LabelForm
             // 

@@ -314,6 +314,19 @@ public partial class LabelForm : Form
         form.ShowDialog();*/
     }
 
+    private void CopyFromUsiMenuItem_Click(object sender, EventArgs e)
+    {
+        var result = Usi.GetCurrentRecordAddress();
+        if (result == null)
+        {
+            MessageBox.Show(this, "Sorry, I could not locate an address on the screen.\nMake sure you have queried for a record!",
+                "Oops.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        SetAddress(result);
+    }
+
     private void ConvertToInternationalButton_Click(object sender, EventArgs e)
     {
         var address = BuildAddress() as DomesticAddress;
