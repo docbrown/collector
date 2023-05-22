@@ -69,6 +69,11 @@ public partial class LabelForm : Form
                 InternationalCountryComboBox.Items.Add(line.ToUpper());
             }
         }
+
+        if (string.IsNullOrWhiteSpace(UspsWebTools.UserId))
+        {
+            ValidateDomesticButton.Enabled = false;
+        }
     }
 
     private void SetAddress(Address address)

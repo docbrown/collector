@@ -1,2 +1,5 @@
 *:Zone.Identifier
 venv/
+.vs/
+bin/
+obj/
