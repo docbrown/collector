@@ -197,10 +197,8 @@ Sub Main()
             MaxY = FrameHeight
 
             For Each Event In Calendar
-                ' Skip events in the past. We don't consider minutes or seconds
-                ' in this check, because we want the current day's events to
-                ' appear for the whole day.
-                If Event.Date.GetMonth() < Clock.GetMonth() And Event.Date.GetDayOfMonth() < Clock.GetDayOfMonth()
+                ' Skip events in the past.
+                If Event.Date.AsSeconds() < Clock.AsSeconds()
                     Continue For
                 End If
                 
