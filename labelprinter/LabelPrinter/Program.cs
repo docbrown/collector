@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Drawing;
 using System.Reflection;
@@ -15,6 +16,12 @@ internal static class Program
     [STAThread]
     static void Main()
     {
+        var config = new ConfigurationBuilder()
+            .AddUserSecrets(typeof(Program).Assembly)
+            .Build();
+
+        UspsWebTools.UserId = config["UspsWebToolsUserId"];
+
         ExecutableIcon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location) ?? SystemIcons.Application;
         ApplicationConfiguration.Initialize();
         Application.Run(new LabelForm());

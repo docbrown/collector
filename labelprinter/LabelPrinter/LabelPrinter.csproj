@@ -10,6 +10,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <ApplicationIcon>Resources\LabelPrinter.ico</ApplicationIcon>
+    <UserSecretsId>fd1b8927-5766-44de-9d7e-ab008effadd4</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="DiffPlex" Version="1.7.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.2.104-beta">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

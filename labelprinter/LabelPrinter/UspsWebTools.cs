@@ -31,12 +31,7 @@ public class UspsWebToolsException : Exception
 
 public static class UspsWebTools
 {
-    public static string UserId { get; private set; }
-
-    static UspsWebTools()
-    {
-        UserId = Environment.GetEnvironmentVariable("USPS_WEBTOOLS_USERID") ?? "";
-    }
+    public static string? UserId { get; set; }
 
     [XmlRoot("Error")]
     public class ErrorModel
@@ -134,34 +129,29 @@ public static class UspsWebTools
         }
     }
 
-    private static XDocument CreateAddressValidateRequest(IEnumerable<DomesticAddress> addresses)
+    private static XDocument CreateAddressValidateRequest(DomesticAddress address)
     {
         var doc = new XDocument();
         var request = new XElement("AddressValidateRequest");
         request.SetAttributeValue("USERID", UserId);
         request.Add(new XElement("Revision", "1"));
-        int id = 0;
-        foreach (var address in addresses)
-        {
-            var elem = new XElement("Address");
-            elem.SetAttributeValue("ID", id);
-            elem.Add(new XElement("FirmName", address.Name),
-                new XElement("Address1", address.Line1),
-                new XElement("Address2", address.Line2),
-                new XElement("City", address.City),
-                new XElement("State", address.State),
-                new XElement("Zip5", address.Zip5),
-                new XElement("Zip4", address.Zip4));
-            request.Add(elem);
-            id++;
-        }
+        var elem = new XElement("Address");
+        elem.SetAttributeValue("ID", "0");
+        elem.Add(new XElement("FirmName", address.Name),
+            new XElement("Address1", address.Line1),
+            new XElement("Address2", address.Line2),
+            new XElement("City", address.City),
+            new XElement("State", address.State),
+            new XElement("Zip5", address.Zip5),
+            new XElement("Zip4", address.Zip4));
+        request.Add(elem);
         doc.Add(request);
         return doc;
     }
 
-    public static async Task<ValidatedDomesticAddress[]?> ValidateAddressesAsync(DomesticAddress[] addresses)
+    public static async Task<ValidatedDomesticAddress?> ValidateAddressAsync(DomesticAddress address)
     {
-        var xml = CreateAddressValidateRequest(addresses).ToString(SaveOptions.DisableFormatting);
+        var xml = CreateAddressValidateRequest(address).ToString(SaveOptions.DisableFormatting);
         var uri = new UriBuilder("https://secure.shippingapis.com/ShippingAPI.dll")
         {
             Query = "API=Verify&XML=" + Uri.EscapeDataString(xml)
@@ -173,20 +163,16 @@ public static class UspsWebTools
         var response = await client.GetAsync(uri);
         xml = await response.Content.ReadAsStringAsync();
         var model = AddressValidateResponseModel.Parse(xml);
-        return model?.Addresses?.Select(m =>
+        var result = model?.Addresses?[0];
+        if (result == null)
         {
-            if (string.IsNullOrWhiteSpace(m.Address1))
-            {
-                m.Address1 = m.Address2;
-                m.Address2 = "";
-            }
-            return new ValidatedDomesticAddress(m, addresses[m.ID]);
-        }).ToArray();
-    }
-
-    public static async Task<ValidatedDomesticAddress?> ValidateAddressAsync(DomesticAddress address)
-    {
-        var results = await ValidateAddressesAsync(new[] { address });
-        return results?[0];
+            return null;
+        }
+        if (string.IsNullOrWhiteSpace(result.Address1))
+        {
+            result.Address1 = result.Address2;
+            result.Address2 = "";
+        }
+        return new ValidatedDomesticAddress(result, address);
     }
 }
