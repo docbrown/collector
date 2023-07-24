@@ -172,8 +172,6 @@ Sub Main()
                 NextSlide()
                 SlideTimer.Mark()
                 Redraw = True
-            Else If Button = 7 ' Instant Replay
-                RestartApp()
             End If
         End If
 
@@ -238,7 +236,6 @@ Sub Main()
 
         ' Perform hourly state changes
         If Clock.GetHours() <> PreviousClock.GetHours()
-            KeepAwake()
             Lunch = (Hours = 12)
             AfterHours = (DayOfWeek = 0 Or DayOfWeek = 6 Or Hours > 16 Or Hours < 8)
             Redraw = True
@@ -330,27 +327,6 @@ Function FormatTime(Hours As Integer, Minutes As Integer) As String
     End If
     Return Time
 End Function
-
-Sub RestartApp()
-    ' Send an ECP request to restart ourselves
-    AppId = CreateObject("roAppInfo").GetID()
-    Url = Substitute("http://localhost:8060/launch/{0}?restart=true", AppId)
-    Request = CreateObject("roUrlTransfer")
-    Request.SetUrl(Url)
-    Request.PostFromString("")
-    ' Wait for the app to restart
-    While (True)
-        Sleep(1000)
-    End While
-End Sub
-
-Sub KeepAwake()
-    ' Send an ECP request to simulate a button press so that the app
-    ' doesn't exit after 2 hours.
-    Request = CreateObject("roUrlTransfer")
-    Request.SetUrl("http://localhost:8060/keypress/Select")
-    Request.PostFromString("")
-End Sub
 
 Function WrapText(Text As String, Width As Integer, Font As Object) As Object
     EndWord = Function(Text As String, Index As Integer) As Integer
