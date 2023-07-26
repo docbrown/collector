@@ -1,6 +1,7 @@
 {
     "files": [
         "audio/**/*",
+        "certs/**/*",
         "source/**/*",
         "components/**/*",
         "images/**/*",

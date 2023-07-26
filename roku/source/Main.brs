@@ -60,6 +60,9 @@ Sub Main()
     ' of the main loop and is used to detect time changes.
     PreviousClock = CreateObject("roDateTime")
 
+    ' This holds asynchronous roUrlTransfers in progress.
+    m.PendingTransfers = {}
+
     m.Port = CreateObject("roMessagePort")
 
     m.Screen = CreateObject("roScreen")
@@ -149,6 +152,11 @@ Sub Main()
     ' If True, the screen will be blank.
     AfterHours = False
 
+    m.LakeDataUrl = "https://www.nwd-mr.usace.army.mil/rcc/programs/data/HAST"
+    m.LakeData = {}
+    m.LakeDataColumnRegex = CreateObject("roRegex", "\(([^)]+)\)", "i")
+    RefreshLakeData()
+
     While(True)
         Msg = Wait(500, m.Port)
 
@@ -173,6 +181,8 @@ Sub Main()
                 SlideTimer.Mark()
                 Redraw = True
             End If
+        Else If Type(Msg) = "roUrlEvent"
+            HandleUrlEvent(Msg)
         End If
 
         ' Update the real-time clock
@@ -373,4 +383,75 @@ Sub PreviousSlide()
     If m.SlideIndex < 0
         m.SlideIndex = m.Slides.Count() - 1
     End If
+End Sub
+
+Sub MarkUrlTransferPending(Xfer as Object)
+    Identity = Xfer.GetIdentity().ToStr()
+    Print "Starting transfer "; Identity; " for "; Xfer.GetUrl()
+    m.PendingTransfers[Identity] = Xfer
+End Sub
+
+Sub RefreshLakeData()
+    Xfer = CreateObject("roUrlTransfer")
+    ' army.mil uses a root CA that is not in Roku's default bundle
+    Xfer.SetCertificatesFile("pkg:/certs/digicert.pem")
+    Xfer.SetUrl(m.LakeDataUrl)
+    Xfer.SetMessagePort(m.Port)
+    Xfer.AsyncGetToString()
+    MarkUrlTransferPending(Xfer)
+End Sub
+
+Sub ParseLakeData(Data as String)
+    m.LakeData.Clear()
+    Lines = Data.Split(Chr(10))
+    Columns = CreateObject("roList")
+    For I = 0 To Lines.Count()-1
+        Line = Lines[I]
+        If I = 2 Then
+            ' Read the column names
+            Matches = m.LakeDataColumnRegex.MatchAll(Line)
+            For Each Match in Matches
+                Columns.Push({ Name: Match[1] })
+            End For
+        Else If I = 3 Then
+            ' Read the column units
+            Matches = m.LakeDataColumnRegex.MatchAll(Line)
+            For J = 0 To Matches.Count()-1
+                Columns[J].Unit = Matches[J][1]
+            End For
+        Else If I > 3 And Line.Len() > 0 Then
+            ' Strip off the date because it has an embedded space
+            Date = Line.Left(16)
+            Line = Line.Mid(16)
+            ' Split everything else on spaces
+            Values = Line.Tokenize(" ")
+            ' Build and save the data entry
+            Entry = { Date: Date }
+            For J = 0 To Values.Count()-1
+                Entry[Columns[J].Name] = {
+                    Value: Values[J],
+                    Unit: Columns[J].Unit
+                }
+            End For
+            m.LakeData.Push(Entry)
+        End If
+    End For
+End Sub
+
+Sub HandleUrlEvent(Event as Object)
+    Identity = Event.GetSourceIdentity().ToStr()
+    Xfer = m.PendingTransfers[Identity]
+    If Xfer = Invalid Then
+        Return
+    End if
+    Status = Event.GetResponseCode()
+    Print "Transfer "; Identity; " completed with status "; Status
+
+    If Status = 200 Then
+        If Xfer.GetUrl() = m.LakeDataUrl Then
+            ParseLakeData(Event.GetString())
+        End If
+    End If
+
+    m.PendingTransfers.Delete(Identity)
 End Sub
