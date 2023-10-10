@@ -6,3 +6,5 @@ bin/
 obj/
 *.csproj.user
 roku/out/
+barcodescanner/x64/
+barcodescanner/packages/
