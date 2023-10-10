@@ -13,6 +13,11 @@
     <UserSecretsId>fd1b8927-5766-44de-9d7e-ab008effadd4</UserSecretsId>
   </PropertyGroup>
 
+  <!-- Embed the secrets file in Release builds -->
+  <ItemGroup Condition="$(Configuration)=='Release'">
+    <EmbeddedResource Include="$(APPDATA)\Microsoft\UserSecrets\$(UserSecretsId)\secrets.json" />
+  </ItemGroup>
+
   <ItemGroup>
     <None Remove="Resources\Countries.txt" />
   </ItemGroup>

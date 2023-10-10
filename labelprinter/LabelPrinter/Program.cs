@@ -16,9 +16,17 @@ internal static class Program
     [STAThread]
     static void Main()
     {
-        var config = new ConfigurationBuilder()
-            .AddUserSecrets(typeof(Program).Assembly)
-            .Build();
+        var builder = new ConfigurationBuilder();
+#if DEBUG
+        builder.AddUserSecrets(typeof(Program).Assembly);
+#else
+        var secrets = Assembly.GetExecutingAssembly().GetManifestResourceStream("LabelPrinter.secrets.json");
+        if (secrets != null)
+        {
+            builder.AddJsonStream(secrets);
+        }
+#endif
+        var config = builder.Build();
 
         UspsWebTools.UserId = config["UspsWebToolsUserId"];
 
