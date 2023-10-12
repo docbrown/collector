@@ -26,7 +26,7 @@ stmtno = 1  # Statement number
 batchno = 1 # Batch number
 pageno = 1  # Page in batch
 
-letter = fitz.PaperRect('letter')
+letter = fitz.paper_rect('letter')
 doc = None
 
 for psfile in psfiles:
