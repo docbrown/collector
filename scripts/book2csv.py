@@ -55,7 +55,7 @@ REAL_FIELDS = [
         Field('ACRES', 98, 8, stripcomma),
         Field('SEC', 107, 2),
         Field('TWN', 112, 2),
-        Field('RNG', 16, 2),
+        Field('RNG', 115, 2),
         Field('LANDTYPE', 119, 2),
         Field('DEEDBKPG', 122)
     ],
