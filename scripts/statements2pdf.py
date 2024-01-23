@@ -43,7 +43,14 @@ for psfile in psfiles:
     for pdf_file in pdf_files:
         if doc is None:
             doc = fitz.open()
-        src = fitz.open(pdf_file)
+
+        try:
+            src = fitz.open(pdf_file)
+        except:
+            print(pdf_file)
+            print(fitz.TOOLS.mupdf_warnings())
+            raise
+
         try:
             page = doc.new_page(width=letter.width, height=letter.height)
             page.show_pdf_page(page.rect, src, 0, clip=page.rect)
@@ -53,7 +60,9 @@ for psfile in psfiles:
         finally:
             src.close()
             src = None
+
         stmtno += 1
+
         if pageno == args.batchsize:
             doc.save(str(batchno) + '.pdf')
             doc.close()
@@ -61,6 +70,7 @@ for psfile in psfiles:
             batchno += 1
             pageno = 1
             continue
+        
         pageno += 1
 
 if doc is not None:
